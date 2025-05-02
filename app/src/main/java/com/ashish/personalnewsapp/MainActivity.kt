@@ -8,10 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+
+import androidx.navigation.compose.rememberNavController
+import com.ashish.personalnewsapp.Navigation.NavGraph
 import com.ashish.personalnewsapp.Screens.NewsListScreen
 import com.ashish.personalnewsapp.ui.theme.PersonalNewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,13 +28,25 @@ class MainActivity : ComponentActivity() {
 //        enableEdgeToEdge()
         setContent {
             PersonalNewsAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    NewsListScreen()
+                val navController = rememberNavController()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+//                    Greeting("Android")
+//                    ExcelFilePicker()
+                    NavGraph(navController)
+//                    OnboardingScreen(navController)
+//                    OnboardingScreenMini()
                 }
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+////                    Greeting(
+////                        name = "Android",
+////                        modifier = Modifier.padding(innerPadding)
+////                    )
+////                    NewsListScreen()
+//                    NavGraph(navController)
+//                }
             }
         }
     }

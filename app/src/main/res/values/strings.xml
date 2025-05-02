@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PersonalNewsApp</string>
+
+    <string name="login_screen">LoginScreen</string>">
+    <string name="splash_screen">SplashScreen</string>">
+    <string name="news_list_screen">NewsListScreen</string>">
 </resources>
