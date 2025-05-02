@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920564467000",
+    "project_id": "personalnewsapp",
+    "storage_bucket": "personalnewsapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920564467000:android:ba4a13238a55f871746dcd",
+        "android_client_info": {
+          "package_name": "com.ashish.personalnewsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZKXtBVwSjRDnjv1EZ8BezeDVAPbHU3_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
