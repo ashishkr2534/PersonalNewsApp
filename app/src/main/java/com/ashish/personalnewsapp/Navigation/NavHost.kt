@@ -27,7 +27,7 @@ fun NavGraph(navController: NavHostController) {
             LoginScreen(navController) // Replace with your actual login screen Composable
         }
         composable(Screen.ProfileScreen.route) {
-            ProfileScreen()
+            ProfileScreen(navController)
         }
     }
 }
