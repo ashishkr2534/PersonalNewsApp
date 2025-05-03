@@ -47,7 +47,7 @@ fun VideoSplashScreen(onVideoCompleted: () -> Unit) {
     AndroidView(
         factory = {
             VideoView(context).apply {
-                val videoUri = Uri.parse("android.resource://${context.packageName}/raw/walk_splash")
+                val videoUri = Uri.parse("android.resource://${context.packageName}/raw/splash_video")
                 setVideoURI(videoUri)
                 setOnCompletionListener {
                     onVideoCompleted()

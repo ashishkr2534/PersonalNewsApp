@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 /**
@@ -47,7 +48,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen1(navController: NavController) {
     var navigateToHome by remember { mutableStateOf<Boolean?>(null) }
-
+    val currentUser = FirebaseAuth.getInstance().currentUser
     LaunchedEffect(Unit) {
         delay(3000)
         // Simulate login check logic
@@ -57,14 +58,23 @@ fun SplashScreen1(navController: NavController) {
 
     // Perform navigation once when navigateToHome is set
     LaunchedEffect(navigateToHome) {
-        when (navigateToHome) {
-            true -> navController.navigate("news_list_screen") {
+//        when (navigateToHome) {
+//            true -> navController.navigate("news_list_screen") {
+//                popUpTo("splash_screen") { inclusive = true }
+//            }
+//            false -> navController.navigate("login_screen") {
+//                popUpTo("splash_screen") { inclusive = true }
+//            }
+//            else -> Unit // Still loading
+//        }
+        if (currentUser != null) {
+            navController.navigate("news_list_screen") {
                 popUpTo("splash_screen") { inclusive = true }
             }
-            false -> navController.navigate("login_screen") {
+        } else {
+            navController.navigate("login_screen") {
                 popUpTo("splash_screen") { inclusive = true }
             }
-            else -> Unit // Still loading
         }
     }
 
@@ -78,5 +88,25 @@ fun SplashScreen1(navController: NavController) {
 fun checkIfUserIsLoggedIn(): Boolean {
     // Replace with real logic, such as checking a shared preference or secure storage
     return true
+}
+
+@Composable
+fun SplashScreen(navController: NavController) {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    LaunchedEffect(Unit) {
+        delay(3000) // after splash video
+        if (currentUser != null) {
+            navController.navigate("home") {
+                popUpTo("splash") { inclusive = true }
+            }
+        } else {
+            navController.navigate("login") {
+                popUpTo("splash") { inclusive = true }
+            }
+        }
+    }
+
+    // Your splash screen video Composable here
 }
 

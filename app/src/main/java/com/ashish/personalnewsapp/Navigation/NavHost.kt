@@ -23,7 +23,7 @@ fun NavGraph(navController: NavHostController) {
             NewsListScreen() // Replace with your actual home screen Composable
         }
         composable("login_screen") {
-            LoginScreen() // Replace with your actual login screen Composable
+            LoginScreen(navController) // Replace with your actual login screen Composable
         }
     }
 }

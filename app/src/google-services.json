@@ -12,7 +12,20 @@
           "package_name": "com.ashish.personalnewsapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "920564467000-6rmat99asr1fj0ck4qbnb68h3nm2a7he.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ashish.personalnewsapp",
+            "certificate_hash": "0a8f2433c74bd6409f1c4015a6953d21744262b1"
+          }
+        },
+        {
+          "client_id": "920564467000-k9dvdn8qn7uhuv243o36kbo69qqfrp6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBZKXtBVwSjRDnjv1EZ8BezeDVAPbHU3_A"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920564467000-k9dvdn8qn7uhuv243o36kbo69qqfrp6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
