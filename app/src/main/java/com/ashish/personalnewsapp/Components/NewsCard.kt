@@ -43,7 +43,7 @@ fun NewsCard(article: Article) {
                 contentDescription = "News Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(200.dp)
+                    .height(250.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
             )

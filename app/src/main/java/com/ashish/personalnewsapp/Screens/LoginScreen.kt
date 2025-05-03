@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ashish.personalnewsapp.GoogleAuth.LoginViewModel
+import com.ashish.personalnewsapp.Navigation.RootRoute
 import com.ashish.personalnewsapp.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -104,7 +105,10 @@ fun LoginScreen(
 
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn == true) {
-            navController.navigate("news_list_screen") {
+//            navController.navigate("news_list_screen") {
+//                popUpTo("splash_screen") { inclusive = true }
+//            }
+            navController.navigate(RootRoute) {
                 popUpTo("splash_screen") { inclusive = true }
             }
         }

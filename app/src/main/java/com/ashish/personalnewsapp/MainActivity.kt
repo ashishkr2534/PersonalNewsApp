@@ -33,20 +33,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Greeting("Android")
-//                    ExcelFilePicker()
+
                     NavGraph(navController)
-//                    OnboardingScreen(navController)
-//                    OnboardingScreenMini()
+
                 }
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-////                    Greeting(
-////                        name = "Android",
-////                        modifier = Modifier.padding(innerPadding)
-////                    )
-////                    NewsListScreen()
-//                    NavGraph(navController)
-//                }
+
             }
         }
     }

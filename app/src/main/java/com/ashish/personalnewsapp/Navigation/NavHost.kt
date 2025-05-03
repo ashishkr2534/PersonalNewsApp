@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ashish.personalnewsapp.Screens.LoginScreen
+import com.ashish.personalnewsapp.Screens.MainScreen
 import com.ashish.personalnewsapp.Screens.NewsListScreen
 import com.ashish.personalnewsapp.Screens.ProfileScreen
 import com.ashish.personalnewsapp.Splash.SplashScreen1
@@ -28,6 +29,10 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(navController)
+        }
+        // MainScreen hosts bottom nav (News/Profile/Settings)
+        composable(RootRoute) {
+            MainScreen(navController)
         }
     }
 }

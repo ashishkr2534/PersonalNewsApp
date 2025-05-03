@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.ashish.personalnewsapp.Navigation.RootRoute
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
@@ -75,9 +76,12 @@ fun SplashScreen1(navController: NavController) {
 //        }
         if(navigateToHome == true){
             if (currentUser != null) {
-                navController.navigate("news_list_screen") {
+                navController.navigate(RootRoute) {
                     popUpTo("splash_screen") { inclusive = true }
                 }
+//                navController.navigate("news_list_screen") {
+//                    popUpTo("splash_screen") { inclusive = true }
+//                }
             } else {
                 navController.navigate("login_screen") {
                     popUpTo("splash_screen") { inclusive = true }
