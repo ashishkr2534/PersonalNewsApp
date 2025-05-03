@@ -20,7 +20,7 @@ fun NavGraph(navController: NavHostController) {
             SplashScreen1(navController = navController)
         }
         composable("news_list_screen") {
-            NewsListScreen() // Replace with your actual home screen Composable
+            NewsListScreen(navController) // Replace with your actual home screen Composable
         }
         composable("login_screen") {
             LoginScreen(navController) // Replace with your actual login screen Composable

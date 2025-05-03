@@ -1,11 +1,15 @@
 package com.ashish.personalnewsapp.Splash
 
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -49,6 +53,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen1(navController: NavController) {
     var navigateToHome by remember { mutableStateOf<Boolean?>(null) }
     val currentUser = FirebaseAuth.getInstance().currentUser
+     var context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(3000)
         // Simulate login check logic
@@ -58,6 +63,7 @@ fun SplashScreen1(navController: NavController) {
 
     // Perform navigation once when navigateToHome is set
     LaunchedEffect(navigateToHome) {
+
 //        when (navigateToHome) {
 //            true -> navController.navigate("news_list_screen") {
 //                popUpTo("splash_screen") { inclusive = true }
@@ -67,15 +73,21 @@ fun SplashScreen1(navController: NavController) {
 //            }
 //            else -> Unit // Still loading
 //        }
-        if (currentUser != null) {
-            navController.navigate("news_list_screen") {
-                popUpTo("splash_screen") { inclusive = true }
+        if(navigateToHome == true){
+            if (currentUser != null) {
+                navController.navigate("news_list_screen") {
+                    popUpTo("splash_screen") { inclusive = true }
+                }
+            } else {
+                navController.navigate("login_screen") {
+                    popUpTo("splash_screen") { inclusive = true }
+                }
             }
-        } else {
-            navController.navigate("login_screen") {
-                popUpTo("splash_screen") { inclusive = true }
-            }
+
         }
+
+       Log.d("Current User", currentUser.toString())
+       Log.d("Current User", currentUser?.displayName.toString() ?:"No Name")
     }
 
     // Show the video splash screen

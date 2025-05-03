@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 /**
@@ -25,6 +27,12 @@ class LoginViewModel @Inject constructor(
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
+//    private val _isLoggedIn = mutableStateOf<Boolean>(false)
+//    val isLoggedIn: State<Boolean> = _isLoggedIn
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
+
+
     private val _user = mutableStateOf<FirebaseUser?>(null)
     val user: State<FirebaseUser?> = _user
 
@@ -35,6 +43,7 @@ class LoginViewModel @Inject constructor(
                 if (task.isSuccessful) {
                     _user.value = auth.currentUser
                     onSuccess()
+                    _isLoggedIn.value = true
                 } else {
                     onFailure(task.exception?.message ?: "Authentication failed")
                 }
@@ -47,5 +56,13 @@ class LoginViewModel @Inject constructor(
             .requestEmail()
             .build()
         return GoogleSignIn.getClient(context, gso)
+    }
+
+    fun signOut(onComplete: () -> Unit) {
+        getGoogleSignInClient().signOut().addOnCompleteListener {
+            auth.signOut()
+            _user.value = null
+            onComplete()
+        }
     }
 }
