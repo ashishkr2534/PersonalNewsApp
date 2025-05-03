@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.ashish.personalnewsapp.Data.Article
 
@@ -54,6 +55,25 @@ fun NewsCard(article: Article) {
         Text(
             text = article.publishedAt ?: "",
             style = MaterialTheme.typography.labelSmall
+        )
+        Text(
+            text = article.source?.name ?: "",
+            style = MaterialTheme.typography.labelSmall
+        )
+        Text(
+            text = article.description ?: "",
+//            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp),
+            fontSize = 16.sp
+        )
+        Text(
+            text = article.content ?: "",
+//            style = MaterialTheme.typography.displaySmall,
+
+            modifier = Modifier.padding(bottom = 8.dp),
+            fontSize = 14.sp
+
+
         )
     }
 }
