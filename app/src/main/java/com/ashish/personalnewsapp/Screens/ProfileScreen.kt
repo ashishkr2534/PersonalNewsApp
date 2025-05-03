@@ -148,7 +148,7 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Sign Out Button
+
                 Button(
                     onClick = {
                         loginViewModel.signOut {

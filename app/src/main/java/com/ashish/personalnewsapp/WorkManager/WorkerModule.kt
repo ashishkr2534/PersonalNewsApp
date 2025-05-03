@@ -1,36 +1,47 @@
 package com.ashish.personalnewsapp.WorkManager
 
+import android.content.Context
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import androidx.work.Configuration
 
 /**
  * Created by Ashish Kr on 02,May,2025
  */
 
-//import dagger.MapKey
-//import kotlin.reflect.KClass
-//
-//@MustBeDocumented
-//@Target(AnnotationTarget.FUNCTION)
-//@Retention(AnnotationRetention.RUNTIME)
-//@MapKey
-//annotation class WorkerKey(val value: KClass<out ListenableWorker>)
-//
+import androidx.hilt.work.HiltWorkerFactory
+
 //@Module
 //@InstallIn(SingletonComponent::class)
-//abstract class WorkerBindingModule {
-//    @Binds
-//    @IntoMap
-//    @WorkerKey(NewsWorker::class)
-//    abstract fun bindNewsWorker(worker: NewsWorker): CoroutineWorker
+//object WorkManagerModule {
+//
+//    @Provides
+//    fun provideWorkManager(@ApplicationContext context: Context, workerFactory: WorkerFactory) {
+//        val configuration = Configuration.Builder()
+//            .setWorkerFactory(workerFactory)
+//            .build()
+//        return WorkManager.initialize(context, configuration)
+//    }
 //}
+@Module
+@InstallIn(SingletonComponent::class)
+object WorkManagerModule {
 
-//import dagger.Module
-//import dagger.hilt.InstallIn
-//import dagger.hilt.components.SingletonComponent
-//
-//@Module
-//@InstallIn(SingletonComponent::class)  // or other appropriate component
-//abstract class WorkerBindingModule {
-//
-//    @dagger.Binds
-//    abstract fun bindNewsWorker(worker: NewsWorker): NewsWorker
-//}
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context, workerFactory: WorkerFactory): WorkManager {
+        val configuration = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
+        // Initialize WorkManager (no need to return it)
+        WorkManager.initialize(context, configuration)
+
+        // Return the instance directly from WorkManager
+        return WorkManager.getInstance(context)
+    }
+}
