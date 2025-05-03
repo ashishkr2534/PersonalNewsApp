@@ -62,6 +62,17 @@ fun NewsListScreen(navController: NavHostController, viewModel: NewsViewModel = 
             }
 
         }
+        item {
+            Button(
+                onClick = {
+                   navController.navigate("profile_screen"){
+                       popUpTo("splash_screen") { inclusive = true }
+                   }
+                }
+            ) {
+                Text("Profile")
+            }
+        }
         items(articles) { article ->
             Card(modifier = Modifier.padding(5.dp)) {
                 Text(article.title,modifier = Modifier.padding(5.dp))

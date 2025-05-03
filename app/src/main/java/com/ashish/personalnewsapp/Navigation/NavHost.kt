@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ashish.personalnewsapp.Screens.LoginScreen
 import com.ashish.personalnewsapp.Screens.NewsListScreen
+import com.ashish.personalnewsapp.Screens.ProfileScreen
 import com.ashish.personalnewsapp.Splash.SplashScreen1
 
 
@@ -24,6 +25,9 @@ fun NavGraph(navController: NavHostController) {
         }
         composable("login_screen") {
             LoginScreen(navController) // Replace with your actual login screen Composable
+        }
+        composable(Screen.ProfileScreen.route) {
+            ProfileScreen()
         }
     }
 }
