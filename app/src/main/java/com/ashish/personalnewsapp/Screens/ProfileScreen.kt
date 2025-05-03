@@ -134,6 +134,18 @@ fun ProfileScreen(
                     color = Color.Gray
                 )
 
+                Text(
+                    text = user?.phoneNumber ?: "No Number",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
+                )
+
+                Text(
+                    text = user?.isEmailVerified.toString() ?: "----",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
+                )
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Sign Out Button
