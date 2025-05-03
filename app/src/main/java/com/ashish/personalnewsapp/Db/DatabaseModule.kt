@@ -12,13 +12,19 @@ import dagger.hilt.components.SingletonComponent
 /**
  * Created by Ashish Kr on 02,May,2025
  */
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "news_db").build()
 
     @Provides
     fun provideNewsDao(db: AppDatabase) = db.newsDao()
+
+    @Provides
+    fun provideUserDao(db: AppDatabase) = db.userDao() // ✅ ADD THIS LINE
 }
+

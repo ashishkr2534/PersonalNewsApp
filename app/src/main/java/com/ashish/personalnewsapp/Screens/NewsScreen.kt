@@ -2,6 +2,7 @@ package com.ashish.personalnewsapp.Screens
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,11 +28,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -39,8 +42,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.ashish.personalnewsapp.Components.NewsCard
+import com.ashish.personalnewsapp.Components.UserEntity
 import com.ashish.personalnewsapp.GoogleAuth.LoginViewModel
 import com.ashish.personalnewsapp.ViewModel.NewsViewModel
+import com.ashish.personalnewsapp.ViewModel.UserViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -269,7 +274,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun NewsListScreen(
     navController: NavHostController,
     viewModel: NewsViewModel = hiltViewModel(),
-    loginViewModel: LoginViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel()
 ) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val articles by viewModel.newsList.collectAsState()
@@ -281,6 +287,11 @@ fun NewsListScreen(
 
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     var locationText by remember { mutableStateOf("Requesting location permission...") }
+
+    val firebaseUser = FirebaseAuth.getInstance().currentUser
+    val uid = firebaseUser?.uid
+
+    var dbUser by remember { mutableStateOf<UserEntity?>(null) }
 
     // Request permission and fetch location
     LaunchedEffect(locationPermissionState.status) {
@@ -305,6 +316,22 @@ fun NewsListScreen(
         viewModel.refresh("290fcafa8eaa4940a318b0ee0fa72254")
     }
 
+    LaunchedEffect(uid) {
+        uid?.let {
+            dbUser = userViewModel.getUser(it)
+
+            // If user not in DB yet, save Firebase user to DB
+            if (dbUser == null && firebaseUser != null) {
+                userViewModel.saveFirebaseUserToDb(firebaseUser, null)
+                dbUser = userViewModel.getUser(it)
+            }
+        }
+    }
+
+
+    val imageModel =  dbUser?.photoUri?.let { Uri.parse(it) }
+        ?: firebaseUser?.photoUrl
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -322,7 +349,7 @@ fun NewsListScreen(
                 },
                 actions = {
                     AsyncImage(
-                        model = currentUser?.photoUrl,
+                        model = imageModel,
                         contentDescription = "Profile Image",
                         modifier = Modifier
                             .padding(end = 16.dp)
@@ -333,7 +360,8 @@ fun NewsListScreen(
                                 navController.navigate("profile_screen") {
                                     popUpTo("splash_screen") { inclusive = true }
                                 }
-                            }
+                            },
+                                contentScale = ContentScale.Crop
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
