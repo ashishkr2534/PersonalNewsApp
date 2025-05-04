@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -76,10 +79,16 @@ fun NewsListScreen(
     val context = LocalContext.current
 
     var searchQuery by remember { mutableStateOf("") }
-    val filteredArticles = if (searchQuery.isBlank()) {
-        articles
-    } else {
-        articles.filter { it?.title?.contains(searchQuery, ignoreCase = true) == true }
+    var selectedSources by remember { mutableStateOf(setOf<String>()) }
+
+    val allSources = remember(articles) {
+        articles.mapNotNull { it?.source?.name }.distinct()
+    }
+
+    val filteredArticles = articles.filter { article ->
+        val matchesSearch = searchQuery.isBlank() || article?.title?.contains(searchQuery, ignoreCase = true) == true
+        val matchesSource = selectedSources.isEmpty() || article?.source?.name in selectedSources
+        matchesSearch && matchesSource
     }
 
     val fusedLocationClient = remember {
@@ -177,7 +186,7 @@ fun NewsListScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column {
+            Column(modifier = Modifier.padding()){
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
@@ -187,6 +196,28 @@ fun NewsListScreen(
                     placeholder = { Text("Search news...") },
                     singleLine = true
                 )
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                ) {
+                    items(allSources) { source ->
+                        val isSelected = selectedSources.contains(source)
+                        FilterChip(
+                            selected = isSelected,
+                            onClick = {
+                                selectedSources = if (isSelected) {
+                                    selectedSources - source
+                                } else {
+                                    selectedSources + source
+                                }
+                            },
+                            label = { Text(source) },
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                    }
+                }
+
                 when {
                     !locationPermissionState.status.isGranted -> {
                         Column(
