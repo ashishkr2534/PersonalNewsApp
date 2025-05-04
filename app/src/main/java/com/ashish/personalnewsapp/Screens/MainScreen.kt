@@ -36,7 +36,7 @@ fun MainScreen(rootNavController: NavHostController) {
                 ProfileScreen(navController = rootNavController)
             }
             composable(BottomNavScreen.Settings.route) {
-                SettingsScreen()
+                AboutScreen()
                 //SplashScreen1(navController = rootNavController)
             }
         }

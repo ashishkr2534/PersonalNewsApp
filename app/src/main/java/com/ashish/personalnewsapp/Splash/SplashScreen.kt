@@ -7,6 +7,9 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
@@ -49,13 +54,62 @@ fun SplashScreen(navController: NavController) {
 
 }
 
+//@RequiresApi(Build.VERSION_CODES.R)
+//@Composable
+//fun SplashScreen1(navController: NavController) {
+//    var navigateToHome by remember { mutableStateOf<Boolean?>(null) }
+//    val context = LocalContext.current
+//    val currentUser = FirebaseAuth.getInstance().currentUser
+//
+//
+//    LaunchedEffect(Unit) {
+//        val window = (context as? Activity)?.window
+//        window?.let {
+//            WindowCompat.setDecorFitsSystemWindows(it, false)
+//            it.insetsController?.apply {
+//                hide(WindowInsets.Type.systemBars())
+//                systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+//            }
+//        }
+//    }
+//
+//    // Delay and decide where to go
+//    LaunchedEffect(Unit) {
+//        delay(3000)
+//        val isLoggedIn = checkIfUserIsLoggedIn()
+//        navigateToHome = isLoggedIn
+//    }
+//
+//    LaunchedEffect(navigateToHome) {
+//        if (navigateToHome == true) {
+//            if (currentUser != null) {
+//                navController.navigate(RootRoute) {
+//                    popUpTo("splash_screen") { inclusive = true }
+//                }
+//            } else {
+//                navController.navigate("login_screen") {
+//                    popUpTo("splash_screen") { inclusive = true }
+//                }
+//            }
+//        }
+//
+//        Log.d("Current User", currentUser.toString())
+//        Log.d("Current User", currentUser?.displayName ?: "No Name")
+//    }
+//
+//
+//    VideoSplashScreen(onVideoCompleted = {
+//        // ToDo
+//    })
+//}
+
+
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun SplashScreen1(navController: NavController) {
     var navigateToHome by remember { mutableStateOf<Boolean?>(null) }
     val context = LocalContext.current
     val currentUser = FirebaseAuth.getInstance().currentUser
-
 
     LaunchedEffect(Unit) {
         val window = (context as? Activity)?.window
@@ -68,7 +122,6 @@ fun SplashScreen1(navController: NavController) {
         }
     }
 
-    // Delay and decide where to go
     LaunchedEffect(Unit) {
         delay(3000)
         val isLoggedIn = checkIfUserIsLoggedIn()
@@ -93,8 +146,9 @@ fun SplashScreen1(navController: NavController) {
     }
 
 
-    VideoSplashScreen(onVideoCompleted = {
-        // ToDo
-    })
+    Box(modifier = Modifier.fillMaxSize().background(Color.Green)) {
+        VideoSplashScreen {
+            // ToDo
+        }
+    }
 }
-
