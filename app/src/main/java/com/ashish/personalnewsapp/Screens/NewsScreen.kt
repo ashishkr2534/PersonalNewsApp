@@ -17,14 +17,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -38,9 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,6 +56,7 @@ import coil.compose.AsyncImage
 import com.ashish.personalnewsapp.Components.NewsCard
 import com.ashish.personalnewsapp.Components.UserEntity
 import com.ashish.personalnewsapp.GoogleAuth.LoginViewModel
+import com.ashish.personalnewsapp.R
 import com.ashish.personalnewsapp.ViewModel.NewsViewModel
 import com.ashish.personalnewsapp.ViewModel.UserViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -190,12 +198,22 @@ fun NewsListScreen(
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    modifier = Modifier
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
                         .fillMaxWidth()
                         .padding(top = 4.dp),
                     placeholder = { Text("Search news...") },
-                    singleLine = true
+                    singleLine = true,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search Icon"
+                        )
+                    },
+                    shape = RoundedCornerShape(30.dp),
+
                 )
+
+
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -242,12 +260,31 @@ fun NewsListScreen(
 ////                            NewsCard(article = it)
 ////                        }
 ////                    }
-                        VerticalPager(
-                            count = filteredArticles.size,
-                            modifier = Modifier.fillMaxSize()
-                        ) { page ->
-                            filteredArticles[page]?.let {
-                                NewsCard(article = it)
+//                        VerticalPager(
+//                            count = filteredArticles.size,
+//                            modifier = Modifier.fillMaxSize()
+//                        ) { page ->
+//                            filteredArticles[page]?.let {
+//                                NewsCard(article = it)
+//                            }
+//                        }
+                        if (filteredArticles.isNotEmpty()) {
+                            VerticalPager(
+                                count = filteredArticles.size,
+                                modifier = Modifier.weight(1f)
+                            ) { page ->
+                                filteredArticles[page]?.let {
+                                    NewsCard(article = it)
+                                }
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("No articles found.")
                             }
                         }
                     }
