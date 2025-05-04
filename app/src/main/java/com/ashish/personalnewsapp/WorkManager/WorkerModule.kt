@@ -14,20 +14,6 @@ import androidx.work.Configuration
  * Created by Ashish Kr on 02,May,2025
  */
 
-import androidx.hilt.work.HiltWorkerFactory
-
-//@Module
-//@InstallIn(SingletonComponent::class)
-//object WorkManagerModule {
-//
-//    @Provides
-//    fun provideWorkManager(@ApplicationContext context: Context, workerFactory: WorkerFactory) {
-//        val configuration = Configuration.Builder()
-//            .setWorkerFactory(workerFactory)
-//            .build()
-//        return WorkManager.initialize(context, configuration)
-//    }
-//}
 @Module
 @InstallIn(SingletonComponent::class)
 object WorkManagerModule {
