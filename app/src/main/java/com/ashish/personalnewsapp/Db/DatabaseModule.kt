@@ -25,6 +25,6 @@ object DatabaseModule {
     fun provideNewsDao(db: AppDatabase) = db.newsDao()
 
     @Provides
-    fun provideUserDao(db: AppDatabase) = db.userDao() // ✅ ADD THIS LINE
+    fun provideUserDao(db: AppDatabase) = db.userDao()
 }
 

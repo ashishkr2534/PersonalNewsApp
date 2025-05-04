@@ -23,5 +23,5 @@ interface UserDao {
     suspend fun deleteUserById(uid: String)
 
     @Query("SELECT * FROM user_table LIMIT 1")
-    suspend fun getAnyUser(): UserEntity? // helpful for single-user apps
+    suspend fun getAnyUser(): UserEntity?
 }

@@ -24,10 +24,10 @@ object WorkManagerModule {
             .setWorkerFactory(workerFactory)
             .build()
 
-        // Initialize WorkManager
+        // initialize WorkManager
         WorkManager.initialize(context, configuration)
 
-        // instance from WorkManager
+        // instance  WorkManager
         return WorkManager.getInstance(context)
     }
 }

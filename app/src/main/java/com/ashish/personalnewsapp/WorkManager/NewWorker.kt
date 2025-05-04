@@ -22,7 +22,7 @@ class NewsWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            val apiKey = "290fcafa8eaa4940a318b0ee0fa72254" // Secure this properly
+            val apiKey = "290fcafa8eaa4940a318b0ee0fa72254"
             repository.refreshNews(apiKey)
             Result.success()
         } catch (e: Exception) {
@@ -47,7 +47,7 @@ fun showNotification(context: Context, title: String, message: String) {
     val notification = NotificationCompat.Builder(context, channelId)
         .setContentTitle(title)
         .setContentText(message)
-        .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your icon
+        .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setAutoCancel(true)
         .build()
 

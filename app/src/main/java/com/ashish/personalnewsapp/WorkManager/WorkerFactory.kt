@@ -22,7 +22,7 @@ class NewsWorkerFactory @Inject constructor(
         workerParameters: WorkerParameters
     ): ListenableWorker? {
         return if (workerClassName == NewsWorker::class.java.name) {
-            // Creating worker with assisted injection
+            //  worker  assisted injection
             NewsWorker(appContext, workerParameters, repository)
         } else {
             null
