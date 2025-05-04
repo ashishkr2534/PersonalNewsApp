@@ -359,19 +359,29 @@ fun ProfileScreen(
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val userId = user?.uid
     var showDialog by remember { mutableStateOf(false) }
+    val firebaseUser = FirebaseAuth.getInstance().currentUser
+    val uid = firebaseUser?.uid
+    var dbUser by remember { mutableStateOf<UserEntity?>(null) }
+    LaunchedEffect(uid) {
+        uid?.let {
+            dbUser = userViewModel.getUser(it)
+            if (dbUser == null && firebaseUser != null) {
+                userViewModel.saveFirebaseUserToDb(firebaseUser, null)
+                dbUser = userViewModel.getUser(it)
+            }
+        }
+    }
+
+    val imageToShow: Any? = when {
+        selectedImageUri != null -> selectedImageUri
+        !dbUser?.photoUri.isNullOrEmpty() -> Uri.fromFile(File(dbUser?.photoUri!!))
+        firebaseUser?.photoUrl != null -> firebaseUser.photoUrl
+        else -> null
+    }
 
     // Declare tempCameraImageUri before camera launcher
     var tempCameraImageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Camera permission launcher
-//    val imageFromCameraLauncher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.TakePicture()
-//    ) { success ->
-//        if (success && tempCameraImageUri != null) {
-//            val filePath = copyUriToInternalStorage(context, tempCameraImageUri!!)
-//            // handle saving to ViewModel
-//        }
-//    }
     val imageFromCameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
@@ -385,7 +395,7 @@ fun ProfileScreen(
     }
 
 
-    // 🟢 THEN: Use it inside camera permission launcher or anywhere else
+
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -412,18 +422,7 @@ fun ProfileScreen(
         }
     }
 
-//    // Camera image capture
-//    val imageFromCameraLauncher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.TakePicture()
-//    ) { success ->
-//        if (success && tempCameraImageUri != null) {
-//            val filePath = copyUriToInternalStorage(context, tempCameraImageUri!!)
-//            if (filePath != null && userId != null) {
-//                selectedImageUri = Uri.fromFile(File(filePath))
-//                userViewModel.updateUserPhoto(userId, filePath)
-//            }
-//        }
-//    }
+
 
     fun requestAndOpenCamera() {
         val permission = Manifest.permission.CAMERA
@@ -490,6 +489,17 @@ fun ProfileScreen(
                             .clickable { showDialog = true },
                         contentScale = ContentScale.Crop
                     )
+                    AsyncImage(
+                        model = imageToShow,
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(Color.Gray)
+                            .clickable { showDialog = true },
+                        contentScale = ContentScale.Crop
+                    )
+
 
                     Icon(
                         imageVector = Icons.Default.Edit,
