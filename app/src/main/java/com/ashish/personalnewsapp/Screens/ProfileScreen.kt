@@ -103,12 +103,17 @@ fun ProfileScreen(
         }
     }
 
-    val imageToShow: Any? = when {
-        selectedImageUri != null -> selectedImageUri
-        !dbUser?.photoUri.isNullOrEmpty() -> Uri.fromFile(File(dbUser?.photoUri!!))
-        firebaseUser?.photoUrl != null -> firebaseUser.photoUrl
-        else -> null
-    }
+//    val imageToShow: Any? = when {
+//        selectedImageUri != null -> selectedImageUri
+//        !dbUser?.photoUri.isNullOrEmpty() -> Uri.fromFile(File(dbUser?.photoUri!!))
+//        firebaseUser?.photoUrl != null -> firebaseUser.photoUrl
+//        else -> null
+//    }
+
+    val imageToShow: Any = selectedImageUri
+        ?: dbUser?.photoUri?.let { Uri.parse(it) }
+        ?: firebaseUser?.photoUrl!!
+
 
     // Declare tempCameraImageUri before camera launcher
     var tempCameraImageUri by remember { mutableStateOf<Uri?>(null) }
