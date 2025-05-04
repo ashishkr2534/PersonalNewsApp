@@ -22,15 +22,15 @@ fun NavGraph(navController: NavHostController) {
             SplashScreen1(navController = navController)
         }
         composable("news_list_screen") {
-            NewsListScreen(navController) // Replace with your actual home screen Composable
+            NewsListScreen(navController)
         }
         composable("login_screen") {
-            LoginScreen(navController) // Replace with your actual login screen Composable
+            LoginScreen(navController)
         }
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(navController)
         }
-        // MainScreen hosts bottom nav (News/Profile/Settings)
+
         composable(RootRoute) {
             MainScreen(navController)
         }

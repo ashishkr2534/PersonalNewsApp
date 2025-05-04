@@ -8,14 +8,6 @@ import com.ashish.personalnewsapp.Data.Source
 /**
  * Created by Ashish Kr on 02,May,2025
  */
-//@Entity(tableName = "articles")
-//data class ArticleEntity(
-//    @PrimaryKey val url: String,
-//    val title: String,
-//    val description: String?,
-//    val urlToImage: String?,
-//    val publishedAt: String
-//)
 
 @Entity(tableName = "articles")
 data class ArticleEntity(
@@ -50,7 +42,3 @@ fun ArticleEntity.toArticle() = Article(
     publishedAt = publishedAt,
     content = content
 )
-
-
-//fun Article.toEntity() = ArticleEntity(url, title, description, urlToImage, publishedAt)
-//fun ArticleEntity.toArticle() = Article(title, description, url, urlToImage, publishedAt)

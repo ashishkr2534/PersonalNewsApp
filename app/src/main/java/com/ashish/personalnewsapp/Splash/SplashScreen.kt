@@ -24,77 +24,9 @@ import kotlinx.coroutines.delay
 /**
  * Created by Ashish Kr on 02,May,2025
  */
-//@Composable
-//fun SplashScreen1(navController: NavController) {
-//
-//    var navigateToHome by remember { mutableStateOf(false) }
-//    LaunchedEffect(Unit) {
-//        delay(3000)
-//        navigateToHome = true
-//    }
-//
-//    if (navigateToHome) {
-//        navController.navigate("news_list_screen") // Navigate to Home screen
-//    } else {
-//        navController.navigate("login_screen") // Navigate to Login screen
-//    }
-//    // Show the video splash screen
-//    VideoSplashScreen(onVideoCompleted = {
-//        // Navigate to the appropriate screen after the video ends
-//        //val isLoggedIn = checkIfUserIsLoggedIn() // Replace with your actual check
-////        if (isLoggedIn) {
-////            navController.navigate("home") // Navigate to Home screen
-////        } else {
-////            navController.navigate("login") // Navigate to Login screen
-////        }
-//
-//
-//
-//    }
-//
-//    )
-//
-//}
 
-//@Composable
-//fun SplashScreen1(navController: NavController) {
-//    var navigateToHome by remember { mutableStateOf<Boolean?>(null) }
-//    val currentUser = FirebaseAuth.getInstance().currentUser
-//     var context = LocalContext.current
-//    LaunchedEffect(Unit) {
-//        delay(3000)
-//        // Simulate login check logic
-//        val isLoggedIn = checkIfUserIsLoggedIn()
-//        navigateToHome = isLoggedIn
-//    }
-//
-//    LaunchedEffect(navigateToHome) {
-//
-//        if(navigateToHome == true){
-//            if (currentUser != null) {
-//                navController.navigate(RootRoute) {
-//                    popUpTo("splash_screen") { inclusive = true }
-//                }
-//
-//            } else {
-//                navController.navigate("login_screen") {
-//                    popUpTo("splash_screen") { inclusive = true }
-//                }
-//            }
-//
-//        }
-//
-//       Log.d("Current User", currentUser.toString())
-//       Log.d("Current User", currentUser?.displayName.toString() ?:"No Name")
-//    }
-//
-//    VideoSplashScreen(onVideoCompleted = {
-//    })
-//}
 
-// Simulated login check function
 fun checkIfUserIsLoggedIn(): Boolean {
-    // Replace with real logic, such as checking a shared preference or secure storage
     return true
 }
 
@@ -103,7 +35,7 @@ fun SplashScreen(navController: NavController) {
     val currentUser = FirebaseAuth.getInstance().currentUser
 
     LaunchedEffect(Unit) {
-        delay(3000) // after splash video
+        delay(3000)
         if (currentUser != null) {
             navController.navigate("home") {
                 popUpTo("splash") { inclusive = true }
@@ -115,7 +47,6 @@ fun SplashScreen(navController: NavController) {
         }
     }
 
-    // Your splash screen video Composable here
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
@@ -125,7 +56,7 @@ fun SplashScreen1(navController: NavController) {
     val context = LocalContext.current
     val currentUser = FirebaseAuth.getInstance().currentUser
 
-    // Make immersive fullscreen
+
     LaunchedEffect(Unit) {
         val window = (context as? Activity)?.window
         window?.let {
@@ -161,9 +92,9 @@ fun SplashScreen1(navController: NavController) {
         Log.d("Current User", currentUser?.displayName ?: "No Name")
     }
 
-    // Play fullscreen video
+
     VideoSplashScreen(onVideoCompleted = {
-        // You can also navigate here if preferred instead of 3-second timer
+        // ToDo
     })
 }
 

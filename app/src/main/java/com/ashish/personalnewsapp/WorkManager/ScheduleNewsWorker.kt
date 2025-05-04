@@ -14,23 +14,6 @@ import androidx.work.WorkManager
 //import org.chromium.base.Log
 import java.util.concurrent.TimeUnit
 
-
-//fun scheduleNewsWorker(context: Context) {
-//    val constraints = Constraints.Builder()
-//        .setRequiredNetworkType(NetworkType.CONNECTED)
-//        .build()
-//
-//    val request = PeriodicWorkRequestBuilder<NewsWorker>(15, TimeUnit.MINUTES)
-//        .setConstraints(constraints)
-//        .build()
-//
-//    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-//        "news_fetch_worker",
-//        ExistingPeriodicWorkPolicy.KEEP,
-//        request
-//    )
-//}
-
 fun scheduleNewsWorker(context: Context) {
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -50,7 +33,6 @@ fun scheduleNewsWorker(context: Context) {
         request
     )
 
-    // Optional: Observe work status to debug failure or state changes
     workManager.getWorkInfoByIdLiveData(request.id).observeForever { workInfo ->
         workInfo?.let {
             Log.d("WorkStatus", "Worker state: ${it.state}")

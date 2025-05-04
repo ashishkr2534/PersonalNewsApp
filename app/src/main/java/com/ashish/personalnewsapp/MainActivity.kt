@@ -28,17 +28,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
-        //scheduleNewsWorker(applicationContext)
 
         setContent {
             PersonalNewsAppTheme {
                 val navController = rememberNavController()
                 val context = LocalContext.current
                 LaunchedEffect(Unit) {
-                    //scheduleNewsWorker(applicationContext)
                     scheduleNewsWorker(applicationContext)
-                    val request = OneTimeWorkRequestBuilder<NewsWorker>().build()
-                    WorkManager.getInstance(context).enqueue(request)
+
                     showNotification(applicationContext, "News Updated", "Top headlines just refreshed.")
 
                 }
@@ -72,19 +69,3 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-
-//fun scheduleNewsWorker(context: Context) {
-//    val constraints = Constraints.Builder()
-//        .setRequiredNetworkType(NetworkType.CONNECTED)
-//        .build()
-//
-//    val request = PeriodicWorkRequestBuilder<NewsWorker>(1, TimeUnit.MINUTES)
-//        .setConstraints(constraints)
-//        .build()
-//
-//    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-//        "news_fetch_worker",
-//        ExistingPeriodicWorkPolicy.KEEP,
-//        request
-//    )
-//}

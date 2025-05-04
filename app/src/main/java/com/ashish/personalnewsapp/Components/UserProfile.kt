@@ -15,12 +15,3 @@ data class UserEntity(
     val photoUri: String?, // this is local file URI if changed, else Firebase photo URL
     val isEmailVerified: Boolean
 )
-
-//@Entity(tableName = "users")
-//data class UserEntity(
-//    @PrimaryKey val uid: String,
-//    val name: String?,
-//    val email: String?,
-//    val phone: String?,
-//    val imageUri: String? // ⬅️ store gallery image URI as string
-//)

@@ -25,12 +25,6 @@ class NewsViewModel @Inject constructor(
         emptyList()
     )
 
-//    fun refresh(apiKey: String) {
-//        viewModelScope.launch {
-//            repository.refreshNews(apiKey)
-//        }
-//    }
-
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
@@ -38,12 +32,12 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.value = true
             try {
-                // Your actual refresh logic
+
                repository.refreshNews(apiKey)
                // val news = repository.refreshNews(apiKey)
                 //_newsList.value = news
             } catch (e: Exception) {
-                // Handle error
+
             } finally {
                 _isRefreshing.value = false
             }

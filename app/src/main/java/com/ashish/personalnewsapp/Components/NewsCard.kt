@@ -68,8 +68,6 @@ fun NewsCard(article: Article) {
         )
         Text(
             text = article.content ?: "",
-//            style = MaterialTheme.typography.displaySmall,
-
             modifier = Modifier.padding(bottom = 8.dp),
             fontSize = 14.sp
 
