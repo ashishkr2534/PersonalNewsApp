@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -179,7 +180,7 @@ fun LoginScreen(
                         .height(50.dp),
                     border = BorderStroke(1.dp, Color.LightGray)
                 ) {
-                    Icon(
+                    Image(
                         painter = painterResource(id = R.drawable.google_icon_png), // you need to add this asset
                         contentDescription = "Google logo",
                         modifier = Modifier.size(20.dp)
