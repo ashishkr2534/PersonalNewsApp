@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -50,50 +52,6 @@ import com.google.android.gms.common.api.ApiException
 /**
  * Created by Ashish Kr on 02,May,2025
  */
-//@Composable
-//fun LoginScreen(){
-//     Box(modifier = Modifier.fillMaxSize()){
-//         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-//
-//             Text( "Please Login to see page")
-//         }
-//     }
-//}
-
-//@Composable
-//fun LoginScreen(navController: NavHostController,
-//    viewModel: LoginViewModel = hiltViewModel(),
-//   // onLoginSuccess: () -> Unit
-//) {
-//    val context = LocalContext.current
-//
-//    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//        try {
-//            val account = task.getResult(ApiException::class.java)
-//            account?.let {
-//                viewModel.signInWithGoogle(
-//                    account = it,
-//                    onSuccess = {Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()},
-//                    onFailure = { error ->
-//                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-//                    }
-//                )
-//            }
-//        } catch (e: ApiException) {
-//            Toast.makeText(context, "Google sign-in failed", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
-//    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//        Button(onClick = {
-//            val signInIntent = viewModel.getGoogleSignInClient().signInIntent
-//            launcher.launch(signInIntent)
-//        }) {
-//            Text("Sign in with Google")
-//        }
-//    }
-//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,67 +64,67 @@ fun LoginScreen(
 
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn == true) {
-//            navController.navigate("news_list_screen") {
-//                popUpTo("splash_screen") { inclusive = true }
-//            }
             navController.navigate(RootRoute) {
                 popUpTo("splash_screen") { inclusive = true }
             }
         }
     }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        try {
-            val account = task.getResult(ApiException::class.java)
-            account?.let {
-                viewModel.signInWithGoogle(
-                    account = it,
-                    onSuccess = {
-                        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                    },
-                    onFailure = { error ->
-                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                    }
-                )
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                account?.let {
+                    viewModel.signInWithGoogle(
+                        account = it,
+                        onSuccess = {
+                            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { error ->
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(context, "Google sign-in failed", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: ApiException) {
-            Toast.makeText(context, "Google sign-in failed", Toast.LENGTH_SHORT).show()
         }
-    }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Welcome", style = MaterialTheme.typography.headlineSmall) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
-            )
-        },
+        contentWindowInsets = WindowInsets.systemBars,
+        containerColor = MaterialTheme.colorScheme.background,
         content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(24.dp),
+                    .padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Login Icon",
+            )
+            {
+                Image(
+                    painter = painterResource(id = R.drawable.google_icon_png), // Replace with your logo
+                    contentDescription = "App Logo",
                     modifier = Modifier
                         .size(100.dp)
-                        .padding(bottom = 16.dp),
-                    tint = MaterialTheme.colorScheme.primary
+                        .padding(bottom = 24.dp)
                 )
 
                 Text(
-                    text = "Sign in to continue",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 32.dp)
+                    text = "Welcome to DailyNews",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
 
+                Text(
+                    text = "Sign in to read top stories",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                    modifier = Modifier.padding(bottom = 32.dp)
+                )
 
                 Button(
                     onClick = {
@@ -174,38 +132,32 @@ fun LoginScreen(
                         launcher.launch(signInIntent)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
-                    border = BorderStroke(1.dp, Color.LightGray)
+                        .height(56.dp),
+                    border = BorderStroke(1.dp, Color.LightGray),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.google_icon_png), // you need to add this asset
+                        painter = painterResource(id = R.drawable.google_icon_png), // Make sure you have this asset
                         contentDescription = "Google logo",
                         modifier = Modifier.size(20.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = "Sign in with Google",
                         color = Color.Black,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.labelLarge
                     )
+
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-
-//                TextButton(
-//                    onClick = {
-//                        viewModel.signOut {
-//                            Toast.makeText(context, "Signed out successfully", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                ) {
-//                    Text("Sign out", color = MaterialTheme.colorScheme.error)
-//                }
             }
+
         }
     )
 }
+
+
+
+
