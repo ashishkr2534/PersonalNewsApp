@@ -24,18 +24,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -78,6 +81,7 @@ fun copyUriToInternalStorage(context: Context, uri: Uri): String? {
     return file.absolutePath
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
@@ -93,6 +97,7 @@ fun ProfileScreen(
     val firebaseUser = FirebaseAuth.getInstance().currentUser
     val uid = firebaseUser?.uid
     var dbUser by remember { mutableStateOf<UserEntity?>(null) }
+
     LaunchedEffect(uid) {
         uid?.let {
             dbUser = userViewModel.getUser(it)
@@ -107,8 +112,6 @@ fun ProfileScreen(
         ?: dbUser?.photoUri?.let { Uri.parse(it) }
         ?: firebaseUser?.photoUrl!!
 
-
-    // Declare tempCameraImageUri before camera launcher
     var tempCameraImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val imageFromCameraLauncher = rememberLauncherForActivityResult(
@@ -117,13 +120,11 @@ fun ProfileScreen(
         if (success && tempCameraImageUri != null && userId != null) {
             val filePath = copyUriToInternalStorage(context, tempCameraImageUri!!)
             if (filePath != null) {
-                selectedImageUri = Uri.fromFile(File(filePath)) // ✅ Show photo
-                userViewModel.updateUserPhoto(userId, filePath) // ✅ Save to DB
+                selectedImageUri = Uri.fromFile(File(filePath))
+                userViewModel.updateUserPhoto(userId, filePath)
             }
         }
     }
-
-
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -131,14 +132,13 @@ fun ProfileScreen(
         if (granted) {
             launchCamera(context) { uri ->
                 tempCameraImageUri = uri
-                imageFromCameraLauncher.launch(uri) // ✅ Now it works
+                imageFromCameraLauncher.launch(uri)
             }
         } else {
             Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Gallery image picker
     val imageFromGalleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -150,8 +150,6 @@ fun ProfileScreen(
             }
         }
     }
-
-
 
     fun requestAndOpenCamera() {
         val permission = Manifest.permission.CAMERA
@@ -193,8 +191,10 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 title = { Text("My Profile") },
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             )
         },
         content = { paddingValues ->
@@ -206,38 +206,28 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Profile Image with edit
                 Box(contentAlignment = Alignment.BottomEnd) {
-                    AsyncImage(
-                        model = selectedImageUri ?: user?.photoUrl,
-                        contentDescription = "Profile Image",
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(CircleShape)
-                            .background(Color.Gray)
-                            .clickable { showDialog = true },
-                        contentScale = ContentScale.Crop
-                    )
                     AsyncImage(
                         model = imageToShow,
                         contentDescription = "Profile Image",
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .background(Color.Gray)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                             .clickable { showDialog = true },
                         contentScale = ContentScale.Crop
                     )
-
-
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .offset((-8).dp, (-8).dp)
                             .size(24.dp)
-                            .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                            .background(
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                                CircleShape
+                            )
                             .padding(4.dp)
                     )
                 }
@@ -249,34 +239,34 @@ fun ProfileScreen(
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Column(modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalAlignment = Alignment.Start) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalAlignment = Alignment.Start
+                ) {
                     Text(
                         text = "Email: ${user?.email ?: "----"}",
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.Gray
-
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
                     Text(
                         text = "Phone: ${user?.phoneNumber ?: "----"}",
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
                     if (user?.isEmailVerified == true) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "Email Verified:",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = Color.Gray
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Verified",
-                                tint = Color.Green,
+                                tint = MaterialTheme.colorScheme.tertiary,
                                 modifier = Modifier.padding(start = 4.dp)
                             )
                         }
@@ -284,13 +274,10 @@ fun ProfileScreen(
                         Text(
                             text = "Email Verified: Not Verified",
                             style = MaterialTheme.typography.titleMedium,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
                 }
-
-
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -309,7 +296,9 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
                     Text("Sign Out", style = MaterialTheme.typography.labelLarge)
                 }
@@ -317,6 +306,7 @@ fun ProfileScreen(
         }
     )
 }
+
 
 // Utility function to launch camera and return a URI
 fun launchCamera(context: Context, onUriReady: (Uri) -> Unit) {
