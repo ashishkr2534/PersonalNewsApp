@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ashish.personalnewsapp.Data.Article
 import com.ashish.personalnewsapp.Db.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -24,9 +25,29 @@ class NewsViewModel @Inject constructor(
         emptyList()
     )
 
+//    fun refresh(apiKey: String) {
+//        viewModelScope.launch {
+//            repository.refreshNews(apiKey)
+//        }
+//    }
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
     fun refresh(apiKey: String) {
         viewModelScope.launch {
-            repository.refreshNews(apiKey)
+            _isRefreshing.value = true
+            try {
+                // Your actual refresh logic
+               repository.refreshNews(apiKey)
+               // val news = repository.refreshNews(apiKey)
+                //_newsList.value = news
+            } catch (e: Exception) {
+                // Handle error
+            } finally {
+                _isRefreshing.value = false
+            }
         }
     }
+
 }

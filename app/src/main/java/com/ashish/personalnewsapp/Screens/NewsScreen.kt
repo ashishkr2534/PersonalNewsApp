@@ -72,6 +72,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 
@@ -401,6 +403,7 @@ fun NewsListScreen(
     val imageModel = dbUser?.photoUri?.let { Uri.parse(it) } ?: firebaseUser?.photoUrl
 
     var menuExpanded by remember { mutableStateOf(false) }
+    val refreshing by viewModel.isRefreshing.collectAsState()
 
     Scaffold(
         topBar = {
@@ -441,102 +444,109 @@ fun NewsListScreen(
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = refreshing),
+            onRefresh = {
+                viewModel.refresh("290fcafa8eaa4940a318b0ee0fa72254")
+            }
         ) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-                placeholder = { Text("Search news...") },
-                trailingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
-                },
-                singleLine = true,
-                shape = RoundedCornerShape(30.dp)
-            )
-
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
             ) {
-                items(allSources) { source ->
-                    val isSelected = selectedSources.contains(source)
-                    FilterChip(
-                        selected = isSelected,
-                        onClick = {
-                            selectedSources = if (isSelected) {
-                                selectedSources - source
-                            } else {
-                                selectedSources + source
-                            }
-                        },
-                        label = { Text(source) },
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    )
-                }
-            }
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                        .fillMaxWidth(),
+                    placeholder = { Text("Search news...") },
+                    trailingIcon = {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(30.dp)
+                )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row {
-                    if (permissionStatusText.isNotBlank()) {
-                        Text(
-                            text = permissionStatusText,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                        )
-                    }
-
-                }
-
-                Row {
-
-                    IconButton(onClick = { menuExpanded = true }) {
-                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
-                    }
-
-                    DropdownMenu(
-                        expanded = menuExpanded,
-                        onDismissRequest = { menuExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Allow Notification") },
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                ) {
+                    items(allSources) { source ->
+                        val isSelected = selectedSources.contains(source)
+                        FilterChip(
+                            selected = isSelected,
                             onClick = {
-                                menuExpanded = false
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    notificationPermissionState?.launchPermissionRequest()
+                                selectedSources = if (isSelected) {
+                                    selectedSources - source
                                 } else {
-                                    Toast.makeText(context, "Not required for your OS version", Toast.LENGTH_SHORT).show()
+                                    selectedSources + source
                                 }
-                            }
+                            },
+                            label = { Text(source) },
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
-                        DropdownMenuItem(
-                            text = { Text("Allow Location") },
-                            onClick = {
-                                menuExpanded = false
-                                locationPermissionState.launchPermissionRequest()
-                            }
-                        )
-                    }                }
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row {
+                        if (permissionStatusText.isNotBlank()) {
+                            Text(
+                                text = permissionStatusText,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                            )
+                        }
+
+                    }
+
+                    Row {
+
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
+                        }
+
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Allow Notification") },
+                                onClick = {
+                                    menuExpanded = false
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        notificationPermissionState?.launchPermissionRequest()
+                                    } else {
+                                        Toast.makeText(context, "Not required for your OS version", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Allow Location") },
+                                onClick = {
+                                    menuExpanded = false
+                                    locationPermissionState.launchPermissionRequest()
+                                }
+                            )
+                        }                }
 
 
-            }
+                }
 
 
 
-            when {
+                when {
 //                !locationPermissionState.status.isGranted -> {
 //                    Column(
 //                        modifier = Modifier.fillMaxSize(),
@@ -551,29 +561,31 @@ fun NewsListScreen(
 //                    }
 //                }
 
-                filteredArticles.isNotEmpty() -> {
-                    VerticalPager(
-                        count = filteredArticles.size,
-                        modifier = Modifier.weight(1f)
-                    ) { page ->
-                        filteredArticles[page]?.let {
-                            NewsCard(article = it)
+                    filteredArticles.isNotEmpty() -> {
+                        VerticalPager(
+                            count = filteredArticles.size,
+                            modifier = Modifier.weight(1f)
+                        ) { page ->
+                            filteredArticles[page]?.let {
+                                NewsCard(article = it)
+                            }
                         }
                     }
-                }
 
-                else -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("No articles found.")
+                    else -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("No articles found.")
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
