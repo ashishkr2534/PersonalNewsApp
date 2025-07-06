@@ -1,4 +1,4 @@
-# 📰 NewsFlash - Modern News Reader App (Jetpack Compose + Firebase + Room)
+# 📰 NewsFlash - Modern News Reader App (Jetpack Compose + Firebase Auth + Room)
 
 **Personal New App** is a personalized news reader app built using **Jetpack Compose** and **Kotlin**. It offers a clean, swipe-based interface like Inshorts, with Google Sign-In, location tracking, image upload, offline support, and notifications – all powered by modern Android architecture.
 
