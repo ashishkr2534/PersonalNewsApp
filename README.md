@@ -1,4 +1,4 @@
-# 📰 NewsFlash - Modern News Reader App (Jetpack Compose + Firebase Auth + Room)
+# 📰 NewsFlash - Modern News Reader App (Jetpack Compose + Firebase Auth + Room DB)
 
 **Personal New App** is a personalized news reader app built using **Jetpack Compose** and **Kotlin**. It offers a clean, swipe-based interface like Inshorts, with Google Sign-In, location tracking, image upload, offline support, and notifications – all powered by modern Android architecture.
 
@@ -40,6 +40,16 @@
 - Future updates will include breaking news alerts
 
 ---
+## 🧰 Screenshots
+<div style="display: flex; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/e5b77be4-f690-41dd-b1d9-1631e2318014" alt="Glassified UI 1" width="200"/>
+  <img src="https://github.com/user-attachments/assets/4850d77c-904f-4cae-a7c5-72360d1e8dfe" alt="Glassified UI 2" width="200"/>
+     <img src="https://github.com/user-attachments/assets/688593f0-8dd0-431e-bbb3-20b75823a69d" alt="Glassified UI 1" width="200"/>
+  <img src="https://github.com/user-attachments/assets/c6e18201-036c-4440-9001-dd3e21e3327b" alt="Glassified UI 2" width="200"/>
+</div>
+
+
+
 
 ## 🧠 Data Persistence
 
@@ -79,3 +89,8 @@
    ```bash
    git clone https://github.com/ashishkr2534/PersonalNewsApp.git
 cd PersonalNewsApp
+
+## 👨‍💻 Developed by  
+Ashish – Android Developer  
+[LinkedIn – ashishkr2534](https://www.linkedin.com/in/ashishkr2534)  
+Tech Focus: Jetpack Compose, Kotlin, SwiftUI, System Architecture
